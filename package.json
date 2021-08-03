@@ -1,0 +1,22 @@
+{
+  "name": "site-hebergement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serveur.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas745/site-hebergement.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas745/site-hebergement/issues"
+  },
+  "homepage": "https://github.com/nicolas745/site-hebergement#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
