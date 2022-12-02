@@ -5,6 +5,8 @@ var exec = require("child_process").exec;
 var path = require('path');
 var express = require("express");
 var app = express();
+var port = 80;
+var host = "localhost"
 function page(reponce) {
     url = reponce.socket.parser.incoming.url;
     var textext = path.extname(url);
@@ -47,4 +49,6 @@ app.get('*', (request, reponce) => {
 app.post('*', (request, reponce) => {
     page(reponce);
 })
-serveurhttp.listen("300");
+serveurhttp.listen(port, host, () => {
+    console.log("serveur est ouver sur le port" + port);
+});
