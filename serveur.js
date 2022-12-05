@@ -1,19 +1,28 @@
 let http = require('http');
 let https = require('https');
 let fs = require('fs');
-var exec = require("child_process").exec;
-var path = require('path');
-var express = require("express");
-var app = express();
-var port = 80;
-var host = "localhost"
+let exec = require("child_process").exec;
+let path = require('path');
+let express = require("express");
+const bodyParser = require("body-parser");
+const router = express.Router();
+let app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+let port = 80;
+let host = "localhost"
 function page(reponce) {
+
+    let post = JSON.stringify(reponce['post']);
+    if (post == undefined) {
+        post = "{}";
+    }
     url = reponce.socket.parser.incoming.url;
-    var textext = path.extname(url);
-    var ext = textext.split('?');
-    var query = {};
+    let textext = path.extname(url);
+    let ext = textext.split('?');
+    let query = {};
     if (ext[1] == undefined) {
-        ext = "";
+        ext[1] = "";
     }
     tablequery = ext[1].split("&");
     for (i = 0; i < tablequery.length; i++) {
@@ -28,7 +37,7 @@ function page(reponce) {
     if (url == "/") {
         fs.stat('page/index/index.php', (errphp, phpstat) => {
             if (errphp == null) {
-                exec("structure\\php -c php.ini -f page/index/index.php " + query, (error, stdout, stderr) => {
+                exec("structure\\php -c php.ini -f page/index/index.php " + query + " " + post, (error, stdout, stderr) => {
                     reponce.end(stdout);
                 });
             } else {
@@ -44,7 +53,7 @@ function page(reponce) {
             }
         })
     } else if (ext[0] == ".php") {
-        exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query, (error, stdout, stderr) => {
+        exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post, (error, stdout, stderr) => {
             reponce.end(stdout);
         });
     } else {
@@ -64,6 +73,7 @@ app.get('*', (request, reponce) => {
     page(reponce);
 });
 app.post('*', (request, reponce) => {
+    reponce['post'] = request.body;
     page(reponce);
 })
 serveurhttp.listen(port, host, () => {
