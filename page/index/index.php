@@ -1,3 +1,7 @@
+<?php
+session_start();
+$_SESSION['dd'] ="ddd";
+?>
 <html>
     <head>
         <link rel="stylesheet" href="style.css"/>
