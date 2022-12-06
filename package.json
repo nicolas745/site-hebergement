@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nicolas745/site-hebergement#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
     "express": "^4.17.1"
   }
 }
