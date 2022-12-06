@@ -66,17 +66,18 @@ function page(reponce, request) {
             if (errphp == null) {
                 exec("structure\\php -c php.ini -f page/index/index.php " + query + " " + post + " " + cookie + " " + usersesion + " " + reponce['iduser'], (error, stdout, stderr) => {
                     fs.readFile('data_session/' + reponce['iduser'] + ".data", (errdata, dataphp) => {
-                        /*fs.unlink('data_session/' + reponce['iduser'] + ".data", () => {
-                            console.log(dataphp);
-                            jsondata = JSON.parse(dataphp.toString('utf-8'));
-                            Object.entries(jsondata.session).forEach((cls) => {
-                                request.session[cls] = jsondata.session[cls];
-                            })
-                            Object.entries(jsondata.cookie).forEach((cls) => {
-                                request.cookies[cls] = jsondata.cookie[cls];
-                            })
+                        fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
+                            if(!err){
+                                jsondata = JSON.parse(dataphp.toString('utf-8'));
+                                Object.entries(jsondata.session).forEach((cls) => {
+                                    request.session[cls] = jsondata.session[cls];
+                                })
+                                Object.entries(jsondata.cookie).forEach((cls) => {
+                                    request.cookies[cls] = jsondata.cookie[cls];
+                                })
+                             }
                             reponce.end(stdout);
-                        });*/
+                        });
                         reponce.end(stdout);
                     });
                 });
@@ -95,14 +96,16 @@ function page(reponce, request) {
     } else if (ext[0] == ".php") {
         exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post + " " + cookie, (error, stdout, stderr) => {
             fs.readFile('data_session/' + reponce['iduser'] + ".data", (errdata, dataphp) => {
-                fs.unlink('data_session/' + reponce['iduser'] + ".data", () => {
-                    jsondata = JSON.parse(dataphp.toString('utf-8'));
-                    Object.entries(jsondata.session).forEach((cls) => {
-                        request.session[cls] = jsondata.session[cls];
-                    })
-                    Object.entries(jsondata.cookie).forEach((cls) => {
-                        request.cookies[cls] = jsondata.cookie[cls];
-                    })
+                fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
+                    if(!err){
+                        jsondata = JSON.parse(dataphp.toString('utf-8'));
+                        Object.entries(jsondata.session).forEach((cls) => {
+                            request.session[cls] = jsondata.session[cls];
+                        })
+                        Object.entries(jsondata.cookie).forEach((cls) => {
+                            request.cookies[cls] = jsondata.cookie[cls];
+                        })
+                    }
                     reponce.end(stdout);
                 });
             });
