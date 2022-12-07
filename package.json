@@ -1,7 +1,7 @@
 {
   "name": "site-hebergement",
   "version": "1.0.0",
-  "description": "",
+  "description": "serveur web nodejs et php8",
   "main": "serveur.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/nicolas745/site-hebergement#readme",
   "dependencies": {
-    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
-    "express": "^4.17.1",
-    "express-session": "^1.17.3"
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "set-cookie-parser": "^2.5.1"
   }
 }

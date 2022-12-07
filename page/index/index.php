@@ -1,6 +1,6 @@
 <?php
-session_start();
-$_SESSION['dd'] ="ddd";
+$_COOKIE['dd'] = "s";
+var_dump($_COOKIE);
 ?>
 <html>
     <head>

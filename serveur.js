@@ -1,17 +1,12 @@
 let http = require('http');
 let https = require('https');
 let fs = require('fs');
-const crypto = require('crypto');
 let exec = require("child_process").exec;
 let path = require('path');
 const cookieParser = require("cookie-parser");
 let express = require("express");
 const session = require("express-session")
-const bodyParser = require("body-parser");
-const router = express.Router();
 let app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
@@ -21,7 +16,7 @@ app.use(session({
 }))
 let port = 80;
 let host = "localhost"
-function page(reponce, request) {
+function page(reponce) {
     let cookie = {};
     Object.keys(reponce['cookies']).forEach(function (cle) {
         cookie['"' + cle + '"'] = '"' + reponce['cookies'][cle] + '"'
@@ -69,14 +64,14 @@ function page(reponce, request) {
                         fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
                             if(!err){
                                 jsondata = JSON.parse(dataphp.toString('utf-8'));
-                                Object.entries(jsondata.session).forEach((cls) => {
-                                    request.session[cls] = jsondata.session[cls];
-                                })
-                                Object.entries(jsondata.cookie).forEach((cls) => {
-                                    request.cookies[cls] = jsondata.cookie[cls];
+                                Object.keys(jsondata.session).forEach((cls) => {
+                                });
+                                Object.keys(jsondata.cookie).forEach((cls) => {
+                                    reponce.cookie(cls,jsondata.cookie)
                                 })
                              }
-                            reponce.end(stdout);
+                            reponce.write(stdout);
+                            reponce.end()
                         });
                         reponce.end(stdout);
                     });
@@ -94,16 +89,16 @@ function page(reponce, request) {
             }
         })
     } else if (ext[0] == ".php") {
-        exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post + " " + cookie, (error, stdout, stderr) => {
+        exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post + " " + cookie + " " + usersesion + " " + reponce['iduser'], (error, stdout, stderr) => {
             fs.readFile('data_session/' + reponce['iduser'] + ".data", (errdata, dataphp) => {
                 fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
                     if(!err){
                         jsondata = JSON.parse(dataphp.toString('utf-8'));
-                        Object.entries(jsondata.session).forEach((cls) => {
-                            request.session[cls] = jsondata.session[cls];
+                        Object.keys(jsondata.session).forEach((cls) => {
+                            
                         })
-                        Object.entries(jsondata.cookie).forEach((cls) => {
-                            request.cookies[cls] = jsondata.cookie[cls];
+                        Object.keys(jsondata.cookie).forEach((cls) => {
+                            
                         })
                     }
                     reponce.end(stdout);
@@ -125,20 +120,16 @@ function page(reponce, request) {
 let serveurhttp = http.createServer(app);
 app.get('*', (request, reponce) => {
     reponce['cookies'] = request.cookies;
-    const sh1 = crypto.createHash('sha1');
-    sh1.update(Date() + request.ip + Math.random() * 10);
-    reponce['iduser'] = sh1.digest('hex');
+    reponce['iduser'] = request.sessionID;
     reponce['session'] = request.session;
-    page(reponce, request);
+    page(reponce);
 });
 app.post('*', (request, reponce) => {
     reponce['post'] = request.body;
-    const sh1 = crypto.createHash('sha1');
-    sh1.update(Date() + request.ip + Math.random() * 10);
-    reponce['iduser'] = sh1.digest('hex');
+    reponce['iduser'] = request.sessionID;
     reponce['session'] = request.session;
     reponce['cookies'] = request.cookies;
-    page(reponce, request);
+    page(reponce);
 })
 serveurhttp.listen(port, host, () => {
     console.log("serveur est ouver sur le port" + port);
