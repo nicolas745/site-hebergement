@@ -8,6 +8,8 @@ var express = require("express");
 const session = require("express-session")
 var app = express();
 app.use(cookieParser());
+port = 80
+host = 'localhost'
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
@@ -120,7 +122,6 @@ app.get('*', (request, reponce) => {
     reponce['cookies'] = request.cookies;
     reponce['iduser'] = request.sessionID;
     reponce['session'] = request.session;
-    console.log(request.session);
     page(request, reponce);
 });
 app.post('*', (request, reponce) => {
