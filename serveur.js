@@ -15,7 +15,7 @@ app.use(session({
     cookie: { secure: true }
 }))
 function page(reponce) {
-    reponce.cookie("aa", "ddd");
+    reponce.cookie("dd", "dd");
     let cookie = {};
     Object.keys(reponce['cookies']).forEach(function (cle) {
         cookie['"' + cle + '"'] = '"' + reponce['cookies'][cle] + '"'
@@ -89,6 +89,7 @@ function page(reponce) {
         })
     } else if (ext[0] == ".php") {
         exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post + " " + cookie + " " + usersesion + " " + reponce['iduser'], (error, stdout, stderr) => {
+            console.log(error);
             fs.readFile('data_session/' + reponce['iduser'] + ".data", (errdata, dataphp) => {
                 fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
                     if (!err) {
