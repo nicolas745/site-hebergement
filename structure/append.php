@@ -1,4 +1,5 @@
 <?php
+var_dump($_SESSION);
 $json = json_encode(array(
     "session" =>$_SESSION,
     "cookie" => $_COOKIE

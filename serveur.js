@@ -10,12 +10,10 @@ var app = express();
 app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
+    resave: true,
+    saveUninitialized: true
 }))
-function page(reponce) {
-    reponce.cookie("dd", "dd");
+function page(request, reponce) {
     let cookie = {};
     Object.keys(reponce['cookies']).forEach(function (cle) {
         cookie['"' + cle + '"'] = '"' + reponce['cookies'][cle] + '"'
@@ -64,15 +62,15 @@ function page(reponce) {
                             if (!err) {
                                 jsondata = JSON.parse(dataphp.toString('utf-8'));
                                 Object.keys(jsondata.session).forEach((cls) => {
+                                    request.session[cls] = jsondata.session[cls];
                                 });
                                 Object.keys(jsondata.cookie).forEach((cls) => {
-                                    reponce.cookie(cls, jsondata.cookie)
+                                    reponce.cookie(cls, jsondata.cookie[cls]);
                                 })
                             }
                             reponce.write(stdout);
                             reponce.end()
                         });
-                        reponce.end(stdout);
                     });
                 });
             } else {
@@ -89,19 +87,19 @@ function page(reponce) {
         })
     } else if (ext[0] == ".php") {
         exec("structure\\php -c php.ini -f page/index" + url.replace("?", "") + " " + query + " " + post + " " + cookie + " " + usersesion + " " + reponce['iduser'], (error, stdout, stderr) => {
-            console.log(error);
             fs.readFile('data_session/' + reponce['iduser'] + ".data", (errdata, dataphp) => {
                 fs.unlink('data_session/' + reponce['iduser'] + ".data", (err) => {
                     if (!err) {
                         jsondata = JSON.parse(dataphp.toString('utf-8'));
                         Object.keys(jsondata.session).forEach((cls) => {
-
-                        })
+                            request.session[cls] = jsondata.session[cls];
+                        });
                         Object.keys(jsondata.cookie).forEach((cls) => {
-
+                            reponce.cookie(cls, jsondata.cookie[cls]);
                         })
                     }
-                    reponce.end(stdout);
+                    reponce.write(stdout);
+                    reponce.end()
                 });
             });
         });
@@ -122,13 +120,14 @@ app.get('*', (request, reponce) => {
     reponce['cookies'] = request.cookies;
     reponce['iduser'] = request.sessionID;
     reponce['session'] = request.session;
-    page(reponce);
+    console.log(request.session);
+    page(request, reponce);
 });
 app.post('*', (request, reponce) => {
     reponce['post'] = request.body;
     reponce['iduser'] = request.sessionID;
     reponce['session'] = request.session;
     reponce['cookies'] = request.cookies;
-    page(reponce);
+    page(request, reponce);
 })
 serveurhttp.listen("80");

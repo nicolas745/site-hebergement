@@ -3,7 +3,9 @@
         <link rel="stylesheet" href="style.css"/>
     </head>
     <body>
-        ss
+        <?php
+        $_SESSION['username'] ="nicolas";
+        ?>
         <form action="" method="POST">
             <input name="name">
             <input type="submit" name="submit">
