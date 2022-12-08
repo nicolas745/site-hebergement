@@ -1,3 +1,7 @@
+<?php
+$_COOKIE['dd'] = "s";
+var_dump($_COOKIE);
+?>
 <html>
     <head>
         <link rel="stylesheet" href="style.css"/>

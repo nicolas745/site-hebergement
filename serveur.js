@@ -130,4 +130,6 @@ app.post('*', (request, reponce) => {
     reponce['cookies'] = request.cookies;
     page(request, reponce);
 })
-serveurhttp.listen("80");
+serveurhttp.listen(port, host, () => {
+    console.log("serveur est ouver sur le port" + port);
+});
