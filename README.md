@@ -12,7 +12,7 @@ Suivez les étapes suivantes pour installer et utiliser ce moteur de site web :
 
 1. Téléchargez ou clonez le dépôt du projet sur votre ordinateur.
 2. Ouvrez le répertoire du projet et double-cliquez sur le fichier `start.bat`.
-3. Ouvrez votre navigateur et accédez à l'adresse `http://localhost:3000` pour accéder au site.
+3. Ouvrez votre navigateur et accédez à l'adresse `http://localhost:80` pour accéder au site.
 
 ### Linux
 
@@ -20,7 +20,7 @@ Suivez les étapes suivantes pour installer et utiliser ce moteur de site web :
 2. Installez Wine en utilisant les outils de gestion de paquets de votre distribution Linux (par exemple, `apt-get` sur Ubuntu).
 3. Ouvrez un terminal et naviguez jusqu'au répertoire du projet.
 4. Exécutez la commande `wineconsole start.bat`.
-5. Ouvrez votre navigateur et accédez à l'adresse `http://localhost:3000` pour accéder au site.
+5. Ouvrez votre navigateur et accédez à l'adresse `http://localhost:80` pour accéder au site.
 
 ## Contribuer
 
